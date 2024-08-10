@@ -2,10 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from .forms import SignupForm, ContactForm
 from django.core.mail import send_mail
-from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Article, Event
 from .forms import ArticleForm, EventForm
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from .serializers import RegisterSerializer, ContactSerializer, ArticleSerializer, EventSerializer
+
 
 # Contact Part : 
 @login_required(login_url='login')
@@ -13,7 +18,8 @@ def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Get the form data
+
+            # Get the email form data
             email = form.cleaned_data['email']
             request_type = form.cleaned_data['request_type']
             message = form.cleaned_data['message']
@@ -22,8 +28,8 @@ def contact_view(request):
             send_mail(
                 f'Contact Request: {request_type}',
                 message,
-                email,  # The user's email will be the sender
-                ['your_email@example.com'],  # Replace with your recipient email
+                email, 
+                ['your_email@example.com'],
                 fail_silently=False,
             )
 
@@ -35,6 +41,7 @@ def contact_view(request):
     return render(request, 'contact/contact.html', {'form': form})
 
 # SignUp Part : 
+
 def signup_view(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -51,6 +58,7 @@ def signup_view(request):
     return render(request, 'auth/signup.html', {'form': form})
 
 # Home Part : 
+
 @login_required(login_url='login')
 def home_view(request):
     return render(request, 'home.html')
@@ -61,7 +69,7 @@ def home_view(request):
 # List of all articles
 @login_required(login_url='login')
 def article_list(request):
-    articles = Article.objects.all().order_by('-published_date')  # Order by newest first
+    articles = Article.objects.all().order_by('-published_date')
     return render(request, 'articles/article_list.html', {'articles': articles})
 
 # Detail view for a single article
@@ -110,7 +118,7 @@ def article_delete(request, article_id):
 # List all events
 @login_required(login_url='login')
 def event_list(request):
-    events = Event.objects.all().order_by('-start_date')  # You can customize the order as needed
+    events = Event.objects.all().order_by('-start_date') 
     return render(request, 'events/event_list.html', {'events': events})
 
 # View a single event
@@ -153,11 +161,109 @@ def event_delete(request, event_id):
         return redirect('event_list')
     return render(request, 'events/event_confirm_delete.html', {'event': event})
 
-# Confirm to Delete an event 
-@login_required(login_url='login')
-def event_delete(request, event_id):
-    event = get_object_or_404(Event, id=event_id)
+
+
+# User Registration API View
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register_api_view(request):
     if request.method == 'POST':
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def contact_api_view(request):
+    if request.method == 'POST':
+        serializer = ContactSerializer(data=request.data)
+        if serializer.is_valid():
+            # Send the email
+            send_mail(
+                f'Contact Request: {serializer.validated_data["request_type"]}',
+                serializer.validated_data['message'],
+                serializer.validated_data['email'],
+                ['your_email@example.com'],  # Replace with the email that will receive the contact requests
+                fail_silently=False,
+            )
+            return Response({"message": "Contact request submitted successfully."}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# List all articles or create a new article
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def article_list_create_api_view(request):
+    if request.method == 'GET':
+        articles = Article.objects.all().order_by('-published_date')
+        serializer = ArticleSerializer(articles, many=True)
+        return Response(serializer.data)
+    
+    if request.method == 'POST':
+        serializer = ArticleSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Retrieve, update, or delete an article
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def article_detail_api_view(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+
+    if request.method == 'GET':
+        serializer = ArticleSerializer(article)
+        return Response(serializer.data)
+
+    if request.method in ['PUT', 'PATCH']:
+        serializer = ArticleSerializer(article, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    if request.method == 'DELETE':
+        article.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+# List all events or create a new event
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def event_list_create_api_view(request):
+    if request.method == 'GET':
+        events = Event.objects.all().order_by('-start_date')
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data)
+    
+    if request.method == 'POST':
+        serializer = EventSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Retrieve, update, or delete an event
+@api_view(['GET', 'PUT', 'PATCH', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def event_detail_api_view(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    if request.method == 'GET':
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
+
+    if request.method in ['PUT', 'PATCH']:
+        serializer = EventSerializer(event, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    if request.method == 'DELETE':
         event.delete()
-        return redirect('event_list')
-    return render(request, 'events/event_confirm_delete.html', {'event': event})
+        return Response(status=status.HTTP_204_NO_CONTENT)
