@@ -4,8 +4,8 @@ from .forms import SignupForm, ContactForm
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Article
-from .forms import ArticleForm
+from .models import Article, Event
+from .forms import ArticleForm, EventForm
 
 # Contact Part : 
 @login_required(login_url='login')
@@ -103,3 +103,61 @@ def article_delete(request, article_id):
         article.delete()
         return redirect('article_list')
     return render(request, 'articles/article_confirm_delete.html', {'article': article})
+
+
+# Event Part : 
+
+# List all events
+@login_required(login_url='login')
+def event_list(request):
+    events = Event.objects.all().order_by('-start_date')  # You can customize the order as needed
+    return render(request, 'events/event_list.html', {'events': events})
+
+# View a single event
+@login_required(login_url='login')
+def event_detail(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'events/event_detail.html', {'event': event})
+
+# Create a new event
+@login_required(login_url='login')
+def event_create(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('event_list')
+    else:
+        form = EventForm()
+    return render(request, 'events/event_form.html', {'form': form})
+
+# Edit an existing event
+@login_required(login_url='login')
+def event_edit(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('event_detail', event_id=event.id)
+    else:
+        form = EventForm(instance=event)
+    return render(request, 'events/event_form.html', {'form': form})
+
+# Delete an event
+@login_required(login_url='login')
+def event_delete(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        event.delete()
+        return redirect('event_list')
+    return render(request, 'events/event_confirm_delete.html', {'event': event})
+
+# Confirm to Delete an event 
+@login_required(login_url='login')
+def event_delete(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    if request.method == 'POST':
+        event.delete()
+        return redirect('event_list')
+    return render(request, 'events/event_confirm_delete.html', {'event': event})
