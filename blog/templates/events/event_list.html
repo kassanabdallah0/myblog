@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<h2>Events</h2>
+<ul>
+    {% for event in events %}
+        <li>
+            <h3><a href="{% url 'event_detail' event.id %}">{{ event.title }}</a></h3>
+            <p>{{ event.start_date }}{% if event.end_date %} - {{ event.end_date }}{% endif %}</p>
+            <p>{{ event.content|truncatewords:30 }}</p>  <!-- Display a snippet of the content -->
+            {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width:200px;">
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+<a href="{% url 'event_create' %}">Create a New Event</a>
+{% endblock %}

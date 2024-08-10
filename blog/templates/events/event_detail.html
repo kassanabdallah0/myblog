@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ event.title }}</h2>
+<p><em>{{ event.start_date }}{% if event.end_date %} - {{ event.end_date }}{% endif %}</em></p>
+{% if event.image %}
+    <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width:600px;">
+{% endif %}
+<p>{{ event.content }}</p>  <!-- Changed from 'description' to 'content' -->
+<a href="{% url 'event_edit' event.id %}">Edit Event</a> |
+<a href="{% url 'event_delete' event.id %}">Delete Event</a> |
+<a href="{% url 'event_list' %}">Back to Events</a>
+{% endblock %}
