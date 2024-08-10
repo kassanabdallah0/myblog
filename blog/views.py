@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Article
 from .forms import ArticleForm
 
+# Contact Part : 
 @login_required(login_url='login')
 def contact_view(request):
     if request.method == 'POST':
@@ -27,12 +28,13 @@ def contact_view(request):
             )
 
             # Return a success message or redirect to a success page
-            return render(request, 'contact_success.html')
+            return render(request, 'contact/contact_success.html')
     else:
         form = ContactForm()
 
-    return render(request, 'contact.html', {'form': form})
+    return render(request, 'contact/contact.html', {'form': form})
 
+# SignUp Part : 
 def signup_view(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -46,9 +48,9 @@ def signup_view(request):
             return redirect('home') 
     else:
         form = SignupForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'auth/signup.html', {'form': form})
 
-# Home View
+# Home Part : 
 @login_required(login_url='login')
 def home_view(request):
     return render(request, 'home.html')
@@ -60,13 +62,13 @@ def home_view(request):
 @login_required(login_url='login')
 def article_list(request):
     articles = Article.objects.all().order_by('-published_date')  # Order by newest first
-    return render(request, 'article_list.html', {'articles': articles})
+    return render(request, 'articles/article_list.html', {'articles': articles})
 
 # Detail view for a single article
 @login_required(login_url='login')
 def article_detail(request, article_id):
     article = get_object_or_404(Article, id=article_id)
-    return render(request, 'article_detail.html', {'article': article})
+    return render(request, 'articles/article_detail.html', {'article': article})
 
 # Create a new article
 @login_required(login_url='login')
@@ -78,7 +80,7 @@ def article_create(request):
             return redirect('article_list')
     else:
         form = ArticleForm()
-    return render(request, 'article_form.html', {'form': form})
+    return render(request, 'articles/article_form.html', {'form': form})
 
 # Edit an existing article
 @login_required(login_url='login')
@@ -91,7 +93,7 @@ def article_edit(request, article_id):
             return redirect('article_detail', article_id=article.id)
     else:
         form = ArticleForm(instance=article)
-    return render(request, 'article_form.html', {'form': form})
+    return render(request, 'articles/article_form.html', {'form': form})
 
 # Delete an article
 @login_required(login_url='login')
@@ -100,4 +102,4 @@ def article_delete(request, article_id):
     if request.method == 'POST':
         article.delete()
         return redirect('article_list')
-    return render(request, 'article_confirm_delete.html', {'article': article})
+    return render(request, 'articles/article_confirm_delete.html', {'article': article})
