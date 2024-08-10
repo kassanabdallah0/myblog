@@ -1,8 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from django.conf import settings
-from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from . import views
+
 urlpatterns = [
     # Authentication URLs
     path('signup/', views.signup_view, name='signup'),
@@ -26,4 +26,25 @@ urlpatterns = [
     path('events/<int:event_id>/', views.event_detail, name='event_detail'),
     path('events/<int:event_id>/edit/', views.event_edit, name='event_edit'),
     path('events/<int:event_id>/delete/', views.event_delete, name='event_delete'),
+
+
+    # API Parts : 
+
+    # Sign-Up Endpoint
+    path('api/signup/', views.register_api_view, name='signup'),
+
+    # JWT Authentication Endpoints:
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # Contact Endpoint : 
+    path('api/contact/',views.contact_api_view, name='contact_api'),
+
+    # API endpoints for articles
+    path('api/articles/', views.article_list_create_api_view, name='article_list_create_api'),
+    path('api/articles/<int:article_id>/', views.article_detail_api_view, name='article_detail_api'),
+
+    # API endpoints for events
+    path('api/events/', views.event_list_create_api_view, name='event_list_create_api'),
+    path('api/events/<int:event_id>/', views.event_detail_api_view, name='event_detail_api'),
 ]
