@@ -19,6 +19,5 @@ from django.urls import path, include
 from blog.views import home_view
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('blog.urls')),
-    path('', home_view, name='home')
+    path('', include('blog.urls')),
 ]

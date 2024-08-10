@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-
+from .models import Article
 # Signup Form
 class SignupForm(UserCreationForm):
     email = forms.EmailField(max_length=200, help_text='Required')
@@ -15,3 +15,8 @@ class ContactForm(forms.Form):
     email = forms.EmailField(max_length=255, widget=forms.EmailInput(attrs={'placeholder': 'Your email address'}))
     request_type = forms.ChoiceField(choices=[('contact', 'Contact'), ('bug', 'Bug Report')], label='Type of Request')
     message = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Your message'}))
+
+class ArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'image']
