@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import environ
 import os
@@ -32,7 +33,16 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
 SECRET_KEY = env('SECRET_KEY')
 
-print(f'EMAIL_BACKEND : {EMAIL_BACKEND} \n EMAIL_HOST {EMAIL_HOST}\n EMAIL_PORT {EMAIL_PORT} \n EMAIL_USE_TLS {EMAIL_USE_TLS} \n EMAIL_HOST_USER {EMAIL_HOST_USER} \n EMAIL_HOST_PASSWORD {EMAIL_HOST_PASSWORD}')
+SIMPLE_JWT = {
+    'SIGNING_KEY': env('JWT_SECRET'),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -53,6 +63,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'blog',
 ]
 
 MIDDLEWARE = [
