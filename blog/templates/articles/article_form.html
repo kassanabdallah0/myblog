@@ -9,19 +9,46 @@
     <form method="post" enctype="multipart/form-data" class="mt-4">
         {% csrf_token %}
         
+        <!-- Title Field with Error Handling -->
         <div class="mb-3">
             {{ form.title.label_tag }}
             {{ form.title }}
+            {% if form.title.errors %}
+                <div class="text-danger">
+                    {% for error in form.title.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
+        
+        <!-- Content Field with Error Handling -->
         <div class="mb-3">
             {{ form.content.label_tag }}
             {{ form.content }}
+            {% if form.content.errors %}
+                <div class="text-danger">
+                    {% for error in form.content.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
+        
+        <!-- Image Field with Error Handling -->
         <div class="mb-3">
             {{ form.image.label_tag }}
             {{ form.image }}
+            {% if form.image.errors %}
+                <div class="text-danger">
+                    {% for error in form.image.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
         
+        <!-- Submit Button -->
         <div class="text-center mt-4">
             <button type="submit" class="btn btn-primary animate__animated animate__fadeInUp">Save</button>
         </div>

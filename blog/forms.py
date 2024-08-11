@@ -18,7 +18,7 @@ class SignupForm(UserCreationForm):
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={"class": "form-control"})
     )
-
+    
 class ContactForm(forms.Form):
     email = forms.EmailField(
         label="Your Email",
@@ -33,6 +33,13 @@ class ContactForm(forms.Form):
         label="Your Message",
         widget=forms.Textarea(attrs={"class": "form-control"})
     )
+
+    def clean_message(self):
+        message = self.cleaned_data.get('message')
+        if len(message) < 10:  # Enforce a minimum length of 10 characters
+            raise forms.ValidationError("The message must be at least 10 characters long.")
+        return message
+
 
 # Article Form : 
 class ArticleForm(forms.ModelForm):
