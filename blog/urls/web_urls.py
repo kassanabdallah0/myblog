@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from blog import views
+from blog.views import web_views as views
 
 urlpatterns = [
     # Authentication URLs
