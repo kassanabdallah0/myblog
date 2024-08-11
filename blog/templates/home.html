@@ -3,6 +3,67 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<h2>Welcome to My Blog</h2>
-<p>You are logged in!</p>
+<div class="container mt-4">
+    <h2 class="text-center animate__animated animate__fadeInDown">Welcome to My Blog</h2>
+    <p class="text-center animate__animated animate__fadeInUp">You are logged in!</p>
+
+    <!-- Carousel for Latest Articles and Events -->
+    {% if not no_articles or not no_events %}
+    <div id="latestCarousel" class="carousel slide mt-5 animate__animated animate__fadeIn" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% if latest_articles %}
+                {% for item in latest_articles %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <a href="{% url 'article_list' %}">
+                        <img src="{{ item.image.url }}" class="d-block w-100" alt="{{ item.title }}" style="max-height: 500px; object-fit: cover;">
+                        <div class="carousel-caption d-block" style="background-color: rgba(0, 0, 0, 0.5);">
+                            <h5>{{ item.title }}</h5>
+                            <p>{{ item.content|truncatechars:100 }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% if latest_events %}
+                {% for event in latest_events %}
+                <div class="carousel-item {% if not latest_articles and forloop.first %}active{% endif %}">
+                    <a href="{% url 'event_list' %}">
+                        <img src="{{ event.image.url }}" class="d-block w-100" alt="{{ event.title }}" style="max-height: 500px; object-fit: cover;">
+                        <div class="carousel-caption d-block" style="background-color: rgba(255, 255, 255, 0.7); color: black;">
+                            <h5>{{ event.title }}</h5>
+                            <p>{{ event.content|truncatechars:100 }}</p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Carousel Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#latestCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#latestCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    {% else %}
+    <!-- Fallback when no articles or events are available -->
+    <div class="alert alert-info text-center mt-5 animate__animated animate__fadeIn">
+        <p>No Articles or Events available at the moment. Check back later!</p>
+    </div>
+    {% endif %}
+
+    <!-- Explanation Card -->
+    <div class="card mt-5 animate__animated animate__fadeInUp">
+        <div class="card-body text-center">
+            <h5 class="card-title">About My Blog</h5>
+            <p class="card-text">
+                My Blog is a platform where you can share your thoughts, read articles, and stay updated with the latest events. Join our community and start sharing your stories today!
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

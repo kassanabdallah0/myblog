@@ -3,13 +3,26 @@
 {% block title %}{{ event.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ event.title }}</h2>
-<p><em>{{ event.start_date }}{% if event.end_date %} - {{ event.end_date }}{% endif %}</em></p>
-{% if event.image %}
-    <img src="{{ event.image.url }}" alt="{{ event.title }}" style="max-width:600px;">
-{% endif %}
-<p>{{ event.content }}</p>
-<a href="{% url 'event_edit' event.id %}">Edit Event</a> |
-<a href="{% url 'event_delete' event.id %}">Delete Event</a> |
-<a href="{% url 'event_list' %}">Back to Events</a>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title text-center animate__animated animate__fadeInDown">{{ event.title }}</h2>
+            <p class="text-center text-muted">
+                <em>{{ event.start_date|date:"F j, Y, g:i a" }}{% if event.end_date %} - {{ event.end_date|date:"F j, Y, g:i a" }}{% endif %}</em>
+            </p>
+            {% if event.image %}
+                <div class="text-center my-3">
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="img-fluid rounded" style="max-width:600px;">
+                </div>
+            {% endif %}
+            <p class="card-text">{{ event.content }}</p>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'event_edit' event.id %}" class="btn btn-warning me-2">Edit Event</a>
+                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger me-2">Delete Event</a>
+                <a href="{% url 'event_list' %}" class="btn btn-secondary">Back to Events</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

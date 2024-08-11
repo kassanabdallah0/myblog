@@ -3,13 +3,22 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ article.title }}</h2>
-<p><em>{{ article.published_date }}</em></p>
-{% if article.image %}
-    <img src="{{ article.image.url }}" alt="{{ article.title }}" style="max-width:600px;">
-{% endif %}
-<p>{{ article.content }}</p>
-<a href="{% url 'article_edit' article.id %}">Edit Article</a> |
-<a href="{% url 'article_delete' article.id %}">Delete Article</a> |
-<a href="{% url 'article_list' %}">Back to Articles</a>
+<div class="container mt-4">
+    <h2 class="text-center animate__animated animate__fadeInDown">{{ article.title }}</h2>
+    <p class="text-center text-muted"><em>{{ article.published_date|date:"F j, Y, g:i a" }}</em></p>
+    
+    {% if article.image %}
+        <div class="text-center my-4">
+            <img src="{{ article.image.url }}" alt="{{ article.title }}" class="img-fluid rounded" style="max-width: 600px;">
+        </div>
+    {% endif %}
+    
+    <p class="lead">{{ article.content }}</p>
+
+    <div class="text-center mt-4">
+        <a href="{% url 'article_edit' article.id %}" class="btn btn-warning me-2">Edit Article</a>
+        <a href="{% url 'article_delete' article.id %}" class="btn btn-danger me-2">Delete Article</a>
+        <a href="{% url 'article_list' %}" class="btn btn-secondary">Back to Articles</a>
+    </div>
+</div>
 {% endblock %}

@@ -3,10 +3,15 @@
 {% block title %}{{ form.instance.id|yesno:"Edit Event,Create Event" }}{% endblock %}
 
 {% block content %}
-<h2>{{ form.instance.id|yesno:"Edit Event,Create Event" }}</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+<div class="container mt-4">
+    <h2 class="text-center animate__animated animate__fadeInDown">{{ form.instance.id|yesno:"Edit Event,Create Event" }}</h2>
+    
+    <form method="post" enctype="multipart/form-data" class="mt-4">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button type="submit" class="btn btn-primary animate__animated animate__fadeInUp">Save</button>
+        </div>
+    </form>
+</div>
 {% endblock %}
