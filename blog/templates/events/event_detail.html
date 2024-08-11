@@ -10,16 +10,18 @@
             <p class="text-center text-muted">
                 <em>{{ event.start_date|date:"F j, Y, g:i a" }}{% if event.end_date %} - {{ event.end_date|date:"F j, Y, g:i a" }}{% endif %}</em>
             </p>
+            
             {% if event.image %}
                 <div class="text-center my-3">
-                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="img-fluid rounded" style="max-width:600px;">
+                    <img src="{{ event.image.url }}" alt="{{ event.title }}" class="img-fluid rounded" style="max-width:600px;" onerror="this.onerror=null;this.src='/static/images/default_event_image.jpg';">
                 </div>
             {% endif %}
-            <p class="card-text">{{ event.content }}</p>
+            
+            <p class="card-text">{{ event.content|default:"No additional details available." }}</p>
 
             <div class="text-center mt-4">
                 <a href="{% url 'event_edit' event.id %}" class="btn btn-warning me-2">Edit Event</a>
-                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger me-2">Delete Event</a>
+                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger me-2" >Delete Event</a>
                 <a href="{% url 'event_list' %}" class="btn btn-secondary">Back to Events</a>
             </div>
         </div>

@@ -10,7 +10,7 @@
             <p class="card-text mb-4"><strong>{{ event.title }}</strong></p>
             <form method="post" class="d-inline">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger me-2 animate__animated animate__shakeX">Delete</button>
+                <button type="submit" class="btn btn-danger me-2 animate__animated animate__shakeX" aria-label="Confirm Delete">Delete</button>
                 <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary animate__animated animate__fadeInUp">Cancel</a>
             </form>
         </div>
