@@ -1,31 +1,115 @@
+/* Base Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #F1FAEE; /* Light Gray Background */
+    color: #1D3557; /* Dark Charcoal for Text */
+    line-height: 1.6;
 }
 
 header, footer {
-    background-color: #222;
-    color: white;
-    padding: 10px;
+    background-color: #1D3557; /* Dark Charcoal Background for Header and Footer */
+    color: #F1FAEE; /* Light Gray for Text */
+    padding: 20px;
     text-align: center;
 }
 
 nav ul {
     list-style-type: none;
     padding: 0;
+    margin: 0;
 }
 
 nav ul li {
-    display: inline;
-    margin-right: 10px;
+    display: inline-block;
+    margin-right: 15px;
 }
 
 nav ul li a {
-    color: white;
+    color: #F1FAEE;
     text-decoration: none;
+    font-weight: 500;
+    padding: 8px 15px;
+    transition: background-color 0.3s ease;
 }
 
+nav ul li a:hover {
+    background-color: #457B9D; /* Slightly darker version of Soft Blue */
+    border-radius: 4px;
+}
+
+/* Main Content */
 main {
-    margin: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #FFFFFF; /* White background for main content */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #E63946; /* Coral Background for Primary Buttons */
+    border-color: #E63946; /* Coral Border for Buttons */
+    color: #FFFFFF; /* White Text */
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active {
+    background-color: #D62839; /* Darker Coral on Hover/Focus */
+    border-color: #D62839;
+}
+
+.btn-secondary {
+    background-color: #457B9D; /* Soft Blue Background for Secondary Buttons */
+    border-color: #457B9D; /* Soft Blue Border */
+    color: #FFFFFF; /* White Text */
+}
+
+.btn-secondary:hover, .btn-secondary:focus, .btn-secondary:active {
+    background-color: #386A85; /* Darker Soft Blue on Hover/Focus */
+    border-color: #386A85;
+}
+
+/* Footer Specific Styles */
+footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    background-color: #1D3557; /* Consistent with Header */
+    color: #F1FAEE;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Links */
+a {
+    color: #E63946; /* Coral for Links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #D62839; /* Darker Coral on Hover */
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+    nav ul li {
+        display: block;
+        margin: 5px 0;
+    }
+
+    header, footer {
+        text-align: center;
+        padding: 15px;
+    }
+
+    main {
+        margin: 15px;
+        padding: 15px;
+    }
 }

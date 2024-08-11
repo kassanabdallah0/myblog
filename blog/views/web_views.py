@@ -5,6 +5,26 @@ from django.contrib.auth.decorators import login_required
 from blog.forms import SignupForm, ContactForm, ArticleForm, EventForm
 from blog.models import Article, Event
 
+# Home Part
+@login_required(login_url='login')
+def home_view(request):
+    # Retrieve the latest articles and events, limiting to a maximum of 2 each
+    latest_articles = Article.objects.order_by('-published_date')[:2]
+    latest_events = Event.objects.order_by('-start_date')[:2]
+
+    # If no articles or events exist, set a flag to handle this case in the template
+    no_articles = latest_articles.count() == 0
+    no_events = latest_events.count() == 0
+
+    context = {
+        'latest_articles': latest_articles,
+        'latest_events': latest_events,
+        'no_articles': no_articles,
+        'no_events': no_events,
+    }
+
+    return render(request, 'home.html', context)
+
 # Contact Part
 @login_required(login_url='login')
 def contact_view(request):
@@ -41,12 +61,6 @@ def signup_view(request):
     else:
         form = SignupForm()
     return render(request, 'auth/signup.html', {'form': form})
-
-# Home Part
-@login_required(login_url='login')
-def home_view(request):
-    return render(request, 'home.html')
-
 # Article Part
 @login_required(login_url='login')
 def article_list(request):

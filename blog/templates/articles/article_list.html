@@ -3,18 +3,32 @@
 {% block title %}Articles{% endblock %}
 
 {% block content %}
-<h2>Articles</h2>
-<ul>
-    {% for article in articles %}
-        <li>
-            <h3><a href="{% url 'article_detail' article.id %}">{{ article.title }}</a></h3>
-            <p>{{ article.published_date }}</p>
-            <p>{{ article.content|truncatewords:30 }}</p> <!-- Display a snippet of the content -->
-            {% if article.image %}
-                <img src="{{ article.image.url }}" alt="{{ article.title }}" style="max-width:200px;">
-            {% endif %}
-        </li>
-    {% endfor %}
-</ul>
-<a href="{% url 'article_create' %}">Create a New Article</a>
+<div class="container mt-4">
+    <h2 class="text-center animate__animated animate__fadeInDown">Articles</h2>
+
+    <!-- Articles Grid -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for article in articles %}
+        <div class="col animate__animated animate__fadeInUp">
+            <div class="card h-100">
+                {% if article.image %}
+                <img src="{{ article.image.url }}" class="card-img-top" alt="{{ article.title }}" style="max-height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{% url 'article_detail' article.id %}" class="text-decoration-none">{{ article.title }}</a>
+                    </h3>
+                    <p class="card-text"><small class="text-muted">{{ article.published_date|date:"F j, Y" }}</small></p>
+                    <p class="card-text">{{ article.content|truncatechars:150 }}</p> <!-- Display a snippet of the content -->
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Create New Article Button -->
+    <div class="text-center mt-4">
+        <a href="{% url 'article_create' %}" class="btn btn-primary animate__animated animate__fadeInUp">Create a New Article</a>
+    </div>
+</div>
 {% endblock %}

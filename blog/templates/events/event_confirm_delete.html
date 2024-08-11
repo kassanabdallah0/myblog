@@ -3,11 +3,17 @@
 {% block title %}Delete Event{% endblock %}
 
 {% block content %}
-<h2>Are you sure you want to delete this event?</h2>
-<p>{{ event.title }}</p>
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Delete</button>
-    <a href="{% url 'event_detail' event.id %}">Cancel</a>
-</form>
+<div class="container mt-4">
+    <div class="card bg-warning text-dark">
+        <div class="card-body text-center">
+            <h2 class="card-title animate__animated animate__fadeInDown">Are you sure you want to delete this event?</h2>
+            <p class="card-text mb-4"><strong>{{ event.title }}</strong></p>
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger me-2 animate__animated animate__shakeX">Delete</button>
+                <a href="{% url 'event_detail' event.id %}" class="btn btn-secondary animate__animated animate__fadeInUp">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
