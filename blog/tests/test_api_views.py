@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 from blog.models import Article, Event
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
-from blog.tests.test_utils import create_test_image
+from blog.tests.test_utils import create_test_image, delete_test_image
 
 class ArticleAPIViewTest(TestCase):
 
@@ -30,6 +30,9 @@ class ArticleAPIViewTest(TestCase):
             image=self.image
         )
 
+    def tearDown(self):
+        # Clean up the test image files
+        delete_test_image(self.article.image.name)
 
     def test_article_list_api_view(self):
         response = self.client.get(reverse('article_list_create_api'))
@@ -43,14 +46,18 @@ class ArticleAPIViewTest(TestCase):
         self.assertEqual(response.data['title'], "Test Article")
 
     def test_article_create_api_view(self):
+        new_image = create_test_image()
         data = {
             "title": "New Test Article",
             "content": "This is another test article content.",
-            "image": create_test_image()
+            "image": new_image
         }
-        response = self.client.post(reverse('article_list_create_api'), data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['title'], "New Test Article")
+        try:
+            response = self.client.post(reverse('article_list_create_api'), data, format='multipart')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(response.data['title'], "New Test Article")
+        finally:
+            delete_test_image(new_image.name)
 
 class EventAPIViewTest(TestCase):
 
@@ -77,6 +84,9 @@ class EventAPIViewTest(TestCase):
             image=self.image
         )
 
+    def tearDown(self):
+        # Clean up the test image files
+        delete_test_image(self.event.image.name)
 
     def test_event_list_api_view(self):
         response = self.client.get(reverse('event_list_create_api'))
@@ -90,13 +100,17 @@ class EventAPIViewTest(TestCase):
         self.assertEqual(response.data['title'], "Test Event")
 
     def test_event_create_api_view(self):
+        new_image = create_test_image()
         data = {
             "title": "New Test Event",
             "content": "This is another test event content.",
             "start_date": "2024-09-10 10:00:00",
             "end_date": "2024-09-10 12:00:00",
-            "image": create_test_image()
+            "image": new_image
         }
-        response = self.client.post(reverse('event_list_create_api'), data, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(response.data['title'], "New Test Event")
+        try:
+            response = self.client.post(reverse('event_list_create_api'), data, format='multipart')
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+            self.assertEqual(response.data['title'], "New Test Event")
+        finally:
+            delete_test_image(new_image.name)

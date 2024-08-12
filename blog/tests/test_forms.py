@@ -1,7 +1,7 @@
 from django.test import TestCase
 from blog.forms import SignupForm, ContactForm, ArticleForm, EventForm
 from datetime import datetime
-from blog.tests.test_utils import create_test_image
+from blog.tests.test_utils import create_test_image, delete_test_image
 
 class SignupFormTest(TestCase):
 
@@ -43,14 +43,18 @@ class ContactFormTest(TestCase):
 
 class ArticleFormTest(TestCase):
 
+    def setUp(self):
+        self.image = create_test_image()
+
+    def tearDown(self):
+        delete_test_image(self.image.name)
 
     def test_article_form_valid(self):
-        image = create_test_image()
         form = ArticleForm(data={
             'title': 'Test Article',
             'content': 'This is a test article content.',
         }, files={
-            'image': image
+            'image': self.image
         })
         if not form.is_valid():
             print("Form is invalid. Errors:", form.errors)
@@ -58,16 +62,20 @@ class ArticleFormTest(TestCase):
 
 class EventFormTest(TestCase):
 
+    def setUp(self):
+        self.image = create_test_image()
+
+    def tearDown(self):
+        delete_test_image(self.image.name)
 
     def test_event_form_valid(self):
-        image = create_test_image()
         form = EventForm(data={
             'title': 'Test Event',
             'content': 'This is a test event content.',
             'start_date': datetime(2024, 9, 1, 10, 0),
             'end_date': datetime(2024, 9, 1, 12, 0),
         }, files={
-            'image': image
+            'image': self.image
         })
         if not form.is_valid():
             print("Form is invalid. Errors:", form.errors)

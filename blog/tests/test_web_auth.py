@@ -2,10 +2,9 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from blog.models import Article
-from blog.tests.test_utils import create_test_image
+from blog.tests.test_utils import create_test_image, delete_test_image
 
 class WebAuthTest(TestCase):
-
 
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='testpassword')
@@ -14,6 +13,9 @@ class WebAuthTest(TestCase):
             content="This is a test article content.",
             image=create_test_image()
         )
+
+    def tearDown(self):
+        delete_test_image(self.article.image.path)
 
     def test_access_article_list_without_login(self):
         response = self.client.get(reverse('article_list'))
@@ -37,11 +39,18 @@ class WebAuthTest(TestCase):
     def test_post_article_with_login(self):
         self.client.login(username='testuser', password='testpassword')
         image = create_test_image()
-        data = {
-            "title": "Authorized Article",
-            "content": "This is allowed.",
-            "image": image
-        }
-        response = self.client.post(reverse('article_create'), data, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Authorized Article")  # Check if the new article is in the response
+
+        try:
+            data = {
+                "title": "Authorized Article",
+                "content": "This is allowed.",
+                "image": image
+            }
+            response = self.client.post(reverse('article_create'), data, follow=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertContains(response, "Authorized Article")  # Check if the new article is in the response
+
+        finally:
+            # Retrieve the created article to delete its image
+            created_article = Article.objects.latest('id')
+            delete_test_image(created_article.image.path)

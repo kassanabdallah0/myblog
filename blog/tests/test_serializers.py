@@ -3,7 +3,7 @@ from blog.serializers import RegisterSerializer, ArticleSerializer, EventSeriali
 from blog.models import Article, Event
 from django.utils.timezone import make_aware
 from datetime import datetime
-from blog.tests.test_utils import create_test_image
+from blog.tests.test_utils import create_test_image, delete_test_image
 
 class RegisterSerializerTest(TestCase):
 
@@ -37,6 +37,9 @@ class ArticleSerializerTest(TestCase):
             image=self.image
         )
 
+    def tearDown(self):
+        delete_test_image(self.article.image.path)
+
     def test_article_serializer(self):
         serializer = ArticleSerializer(instance=self.article)
         self.assertEqual(serializer.data['title'], self.article.title)
@@ -55,9 +58,11 @@ class EventSerializerTest(TestCase):
             image=self.image
         )
 
+    def tearDown(self):
+        delete_test_image(self.event.image.path)
+
     def test_event_serializer(self):
         serializer = EventSerializer(instance=self.event)
         self.assertEqual(serializer.data['title'], self.event.title)
         self.assertEqual(serializer.data['content'], self.event.content)
         self.assertIn('/media/events/test_event_image', serializer.data['image'])
-
