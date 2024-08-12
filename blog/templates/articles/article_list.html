@@ -21,7 +21,7 @@
                     </h3>
                     <p class="card-text"><small class="text-muted">{{ article.published_date|date:"F j, Y" }}</small></p>
                     <p class="card-text">{{ article.content|truncatechars:150 }}</p> <!-- Display a snippet of the content -->
-                    <a href="{% url 'article_detail' article.id %}" class="btn btn-link p-0">Read more</a>
+                    <a href="{% url 'article_detail' article.id %}" class="btn btn-link p-0">En savoir plus</a>
                 </div>
             </div>
         </div>
@@ -29,13 +29,13 @@
     </div>
     {% else %}
     <div class="alert alert-info text-center mt-5 animate__animated animate__fadeIn">
-        <p>No Articles available at the moment. Check back later!</p>
+        <p>Aucun article n'est disponible pour le moment. Revenez plus tard !</p>
     </div>
     {% endif %}
 
     <!-- Create New Article Button -->
     <div class="text-center mt-4">
-        <a href="{% url 'article_create' %}" class="btn btn-primary animate__animated animate__fadeInUp">Create a New Article</a>
+        <a href="{% url 'article_create' %}" class="btn btn-primary animate__animated animate__fadeInUp">Créer un nouvel article</a>
     </div>
 </div>
 {% endblock %}

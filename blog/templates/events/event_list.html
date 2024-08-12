@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center animate__animated animate__fadeInDown">Events</h2>
+    <h2 class="text-center animate__animated animate__fadeInDown">Evénements</h2>
 
     {% if events %}
     <!-- Events Grid -->
@@ -19,6 +19,7 @@
                     </h3>
                     <p class="card-text"><small class="text-muted">{{ event.start_date|date:"F j, Y" }}{% if event.end_date %} - {{ event.end_date|date:"F j, Y" }}{% endif %}</small></p>
                     <p class="card-text">{{ event.content|truncatechars:150 }}</p>  <!-- Display a snippet of the content -->
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-link p-0">En savoir plus</a>
                 </div>
             </div>
         </div>
@@ -27,13 +28,13 @@
     {% else %}
     <!-- Fallback when no events are available -->
     <div class="alert alert-info text-center mt-5 animate__animated animate__fadeIn">
-        <p>No events are currently available. Please check back later!</p>
+        <p>Aucun événement n'est actuellement disponible. Revenez plus tard !</p>
     </div>
     {% endif %}
 
     <!-- Create New Event Button -->
     <div class="text-center mt-4">
-        <a href="{% url 'event_create' %}" class="btn btn-primary animate__animated animate__fadeInUp">Create a New Event</a>
+        <a href="{% url 'event_create' %}" class="btn btn-primary animate__animated animate__fadeInUp">Créer un nouvel événement</a>
     </div>
 </div>
 {% endblock %}

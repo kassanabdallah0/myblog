@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}Delete Article{% endblock %}
+{% block title %}Supprimer l'article{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <div class="card bg-warning text-dark">
         <div class="card-body text-center">
-            <h2 class="card-title animate__animated animate__fadeInDown">Are you sure you want to delete this article?</h2>
+            <h2 class="card-title animate__animated animate__fadeInDown">Êtes-vous sûr de vouloir supprimer cet article ?</h2>
             <p class="card-text mb-4"><strong>{{ article.title }}</strong></p>
             <form method="post" class="d-inline">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-danger me-2 animate__animated animate__shakeX">Delete</button>
-                <a href="{% url 'article_detail' article.id %}" class="btn btn-secondary animate__animated animate__fadeInUp">Cancel</a>
+                <button type="submit" class="btn btn-danger me-2 animate__animated animate__shakeX">Supprimer</button>
+                <a href="{% url 'article_detail' article.id %}" class="btn btn-secondary animate__animated animate__fadeInUp">Annuler</a>
             </form>
         </div>
     </div>

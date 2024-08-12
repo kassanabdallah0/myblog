@@ -16,9 +16,9 @@
     <p class="lead">{{ article.content }}</p>
 
     <div class="text-center mt-4">
-        <a href="{% url 'article_edit' article.id %}" class="btn btn-warning me-2">Edit Article</a>
-        <a href="{% url 'article_delete' article.id %}" class="btn btn-danger me-2">Delete Article</a>
-        <a href="{% url 'article_list' %}" class="btn btn-secondary">Back to Articles</a>
+        <a href="{% url 'article_edit' article.id %}" class="btn btn-warning me-2">Editer l'article</a>
+        <a href="{% url 'article_delete' article.id %}" class="btn btn-danger me-2">Supprimer l'article</a>
+        <a href="{% url 'article_list' %}" class="btn btn-secondary">Retour aux articles</a>
     </div>
 </div>
 {% endblock %}

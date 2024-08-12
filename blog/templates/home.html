@@ -4,8 +4,8 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2 class="text-center animate__animated animate__fadeInDown">Welcome to My Blog</h2>
-    <p class="text-center animate__animated animate__fadeInUp">You are logged in!</p>
+    <h2 class="text-center animate__animated animate__fadeInDown">Bienvenue sur mon blog</h2>
+    <p class="text-center animate__animated animate__fadeInUp">Vous êtes connecté !</p>
 
     <!-- Carousel for Latest Articles and Events -->
     {% if not no_articles or not no_events %}
@@ -42,26 +42,26 @@
         <!-- Carousel Controls -->
         <button class="carousel-control-prev" type="button" data-bs-target="#latestCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">Précédent</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#latestCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">Suivant</span>
         </button>
     </div>
     {% else %}
     <!-- Fallback when no articles or events are available -->
     <div class="alert alert-info text-center mt-5 animate__animated animate__fadeIn">
-        <p>No Articles or Events available at the moment. Check back later!</p>
+        <p>Aucun article ou événement n'est disponible pour le moment. Revenez plus tard !</p>
     </div>
     {% endif %}
 
     <!-- Explanation Card -->
     <div class="card mt-5 animate__animated animate__fadeInUp">
         <div class="card-body text-center">
-            <h5 class="card-title">About My Blog</h5>
+            <h5 class="card-title">À propos de mon blog</h5>
             <p class="card-text">
-                My Blog is a platform where you can share your thoughts, read articles, and stay updated with the latest events. Join our community and start sharing your stories today!
+                Mon blog est une plateforme où vous pouvez partager vos pensées, lire des articles et rester informé des derniers événements. Rejoignez notre communauté et commencez à partager vos histoires dès aujourd'hui !
             </p>
         </div>
     </div>

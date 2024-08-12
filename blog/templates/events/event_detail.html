@@ -20,9 +20,9 @@
             <p class="card-text">{{ event.content|default:"No additional details available." }}</p>
 
             <div class="text-center mt-4">
-                <a href="{% url 'event_edit' event.id %}" class="btn btn-warning me-2">Edit Event</a>
-                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger me-2" >Delete Event</a>
-                <a href="{% url 'event_list' %}" class="btn btn-secondary">Back to Events</a>
+                <a href="{% url 'event_edit' event.id %}" class="btn btn-warning me-2">Modifier l'événement</a>
+                <a href="{% url 'event_delete' event.id %}" class="btn btn-danger me-2" >Supprimer un événement</a>
+                <a href="{% url 'event_list' %}" class="btn btn-secondary">Retour aux événements</a>
             </div>
         </div>
     </div>
